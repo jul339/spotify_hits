@@ -49,6 +49,7 @@ pytz==2025.2
 pyzmq==27.0.0
 redis==6.2.0
 requests==2.32.4
+seaborn==0.13.2
 six==1.17.0
 spotipy==2.25.1
 stack-data==0.6.3

@@ -80,7 +80,9 @@ def extract_tracks(sp, playlist_ids, debug = False) -> list:
     if not playlist_ids or not isinstance(playlist_ids, dict):
         raise ValueError('Playlist IDs should be a non-empty dictionary mapping years to playlist IDs')
     data = []
-
+    logging.info("Extracting tracks from playlists")
+    
+    # Create a list of all the track with their metadata
     for year, playlist_id in playlist_ids.items():
         logging.info(f"Fetching tracks for playlist {year}...")
         results = sp.playlist_tracks(playlist_id)
