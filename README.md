@@ -19,7 +19,6 @@ This project is a technical test completed as part of the recruitment process fo
 - **Libraries**: `spotipy`, `pandas`, `matplotlib`, `seaborn`, `pytest`  
 - **Containerization**: Docker  
 - **Testing**: Pytest (unit and functional tests)  
-- **Structure**: Modular layout (`src/`, `tests/`, `notebooks/`)
 
 ---
 
@@ -102,7 +101,6 @@ All analyses are available in [`notebooks/exploration.ipynb`](notebooks/explorat
 - 🎶 **How have the most popular genres evolved between 2020 and 2024?**
 - ⏱️ **Has the average duration of hit tracks changed over the years?**
 - 🧑‍🎤 **Which artists appeared the most across the 5 playlists?**
-- 📈 Additional exploratory visualizations (distributions, correlations, etc.)
 
 ---
 
