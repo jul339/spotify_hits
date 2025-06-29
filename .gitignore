@@ -1,0 +1,27 @@
+/.cache
+/.pytest_cache
+
+# Environnement Python
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Fichiers de données
+data/
+*.csv
+
+# Fichiers secrets
+.env
+
+# Logs
+*.log
+
+# Éditeurs
+.vscode/
+.idea/
+
+# Jupyter
+*.ipynb_checkpoints
