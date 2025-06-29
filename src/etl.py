@@ -69,6 +69,7 @@ def extract_tracks(sp, playlist_ids, debug = False) -> list:
     Args:
         sp (spotipy.Spotify): Authenticated Spotify client.
         playlist_ids (dict[int, str]): Mapping of year to playlist ID.
+        debug (bool): If True, limits the number of tracks processed for debugging purposes.
 
     Returns:
         list[dict]: List of dictionaries containing enriched track and artist metadata.
@@ -145,15 +146,17 @@ def save_to_csv(df, file_path):
         folder (str): Target directory
 
     Raises:
-        IOError: If folder does not exist or write fails
+        IOError: If write fails
+        ValueError: If df is not a Pandas DataFrame
     """
     if not os.path.isdir("data"):
-        raise IOError("Data folder does not exist. Please create 'data' directory before saving CSV.")
+        logging.info("Creating 'data' directory")
+        os.makedirs("data")
 
     if not isinstance(df, pd.DataFrame):
         raise ValueError("Input data must be a Pandas DataFrame.")
     if os.path.exists(file_path):
-        logging.warning(f"CSV '{file_path}' already exists. It will be replaced.")
+        logging.warning(f"CSV '{file_path}' already exists. It will be overwrite.")
 
     try:
         df.to_csv(file_path, index=False)
