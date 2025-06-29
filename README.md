@@ -29,12 +29,13 @@ This project is a technical test completed as part of the recruitment process fo
 spotify_hits/
 ├── src/                # ETL logic and configuration
 │   ├── etl.py
+│   ├── main.py
 │   └── config.py
 ├── tests/              # Unit tests (pytest)
 │   ├── test_etl.py
-│   └── ...
+│   └── test_integration.py
 ├── notebooks/          # Data analysis (Jupyter)
-│   └── exploration.ipynb
+│   └── spotigy_analysis.ipynb
 ├── data/               # Raw and processed CSVs (excluded from Git)
 ├── Dockerfile          # Docker image definition
 ├── Makefile            # Commands for building, testing, running
