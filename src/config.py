@@ -4,5 +4,4 @@ SPOTIFY_CREDENTIALS = {
     "client_id": "bfacc6c41eb8495eaa1caa8a2077baff",
     "client_secret": "b45a6c69255f45c7b0bfac9740888e50",
 }
-DATA_FOLDER="data/"
-CSV_PATH=f"{DATA_FOLDER}/top_hits.csv"
+CSV_PATH=f"data/top_hits.csv"

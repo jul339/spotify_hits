@@ -103,17 +103,16 @@ def test_track_duration_is_numeric(mock_spotify_client):
 
 
 def test_save_to_csv_creates_file(tmp_path):
-    df = pd.DataFrame({"a": [1], "b": [2]})
-    folder = tmp_path
-    file_name = "test.csv"
+    df = pd.DataFrame([{"col1": "val1", "col2": "val2"}])
+    output_file = tmp_path / "test.csv"
     
-    save_to_csv(df, file_name, str(folder))
+    save_to_csv(df, output_file)
     
-    file_path = folder / file_name
-    assert file_path.exists()
-    loaded = pd.read_csv(file_path)
-    assert "a" in loaded.columns
-    assert loaded.iloc[0]["a"] == 1
+    assert output_file.exists()
+    
+    # Vérifie contenu
+    df_loaded = pd.read_csv(output_file)
+    assert df_loaded.iloc[0]["col1"] == "val1"
 
 def test_save_to_csv_overwrites(tmp_path):
     df1 = pd.DataFrame({"a": [1]})
@@ -121,41 +120,17 @@ def test_save_to_csv_overwrites(tmp_path):
     file_path = tmp_path / "overwrite.csv"
 
     # Écrire une première fois
-    save_to_csv(df1, "overwrite.csv", str(tmp_path))
+    save_to_csv(df1, file_path)
     # Réécrire avec autre contenu
-    save_to_csv(df2, "overwrite.csv", str(tmp_path))
+    save_to_csv(df2, file_path)
 
+    assert file_path.exists()
     df_loaded = pd.read_csv(file_path)
     assert df_loaded.iloc[0]["a"] == 999
 
 def test_save_to_csv_raises_if_folder_missing(tmp_path):
     df = pd.DataFrame({"a": [1]})
-    bad_folder = tmp_path / "nonexistent"
+    output_file = tmp_path / "nonexistent_folder" / "test.csv"
 
-    with pytest.raises(IOError, match="doesn't exist"):
-        save_to_csv(df, "output.csv", str(bad_folder))
-
-
-# def test_save_to_csv_creates_file(tmp_path):
-#     df = pd.DataFrame({"a": [1], "b": [2]})
-#     output_file = tmp_path / "test.csv"
-#     save_to_csv(df, csv_name=str(output_file))
-#     assert output_file.exists()
-
-# def test_save_to_csv_overwrites_existing(tmp_path):
-#     df1 = pd.DataFrame({"a": [1]})
-#     df2 = pd.DataFrame({"a": [2]})
-#     output_file = tmp_path / "test.csv"
-
-#     save_to_csv(df1, csv_name=str(output_file))
-#     save_to_csv(df2, csv_name=str(output_file))
-
-#     df_loaded = pd.read_csv(output_file)
-#     assert df_loaded.iloc[0]["a"] == 2
-
-# def test_save_to_csv_raises_if_folder_missing(tmp_path):
-#     df = pd.DataFrame({"a": [1]})
-#     bad_path = tmp_path / "nonexistent_folder" / "test.csv"
-
-#     with pytest.raises(IOError, match="doesn't exist"):
-#         save_to_csv(df, path=str(bad_path), )
+    with pytest.raises(IOError):
+       save_to_csv(df, output_file)

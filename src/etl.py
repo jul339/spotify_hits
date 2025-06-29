@@ -48,6 +48,8 @@ def get_playlist_ids(sp, years) -> dict:
     """
 
     playlist_ids = {}
+    if not years or not isinstance(years, list):
+        raise ValueError('Years should be a non-empty list of integers')
     for year in years:
         logging.info(f"Searching for playlist 'Top Hits of {year}'...")
         results = sp.search(q=f"Top Hits of {year}", type="playlist", limit=1)
@@ -60,7 +62,7 @@ def get_playlist_ids(sp, years) -> dict:
 
 
 
-def extract_tracks(sp, playlist_ids) -> list:
+def extract_tracks(sp, playlist_ids, debug = False) -> list:
     """
     Extracts track and artist metadata from a list of Spotify playlists.
 
@@ -75,13 +77,17 @@ def extract_tracks(sp, playlist_ids) -> list:
         ValueError: If playlist_ids is empty or None.
     """
 
-    if not playlist_ids:
-        raise ValueError('Dictionary of playlist ids should not be null or empty')
+    if not playlist_ids or not isinstance(playlist_ids, dict):
+        raise ValueError('Playlist IDs should be a non-empty dictionary mapping years to playlist IDs')
     data = []
+
     for year, playlist_id in playlist_ids.items():
         logging.info(f"Fetching tracks for playlist {year}...")
         results = sp.playlist_tracks(playlist_id)
-        for item in results["items"]:
+        items = results["items"]
+        if debug and len(items) > 10:
+                items = items[:10]
+        for item in items:
             track = item["track"]
             artist = sp.artist(track["artists"][0]["id"])
             data.append({
@@ -113,13 +119,12 @@ def transform_to_dataframe(raw_data):
     Raises:
         ValueError: If raw_data is None or empty.
     """
-
-    if not raw_data:
-        raise ValueError('Extract tracks should not be null or empty')
+    if not raw_data or not isinstance(raw_data, list):
+        raise ValueError('Extract tracks should be a non-empty list of dictionaries')
     
     logging.info("Transforming raw data into DataFrame")
     df = pd.DataFrame(raw_data)
-
+    
     df.drop_duplicates(subset=["track_name", "artist_name", "year"], inplace=True)
     
     df["album_release"] = pd.to_datetime(df["album_release"], errors="coerce")
@@ -128,7 +133,7 @@ def transform_to_dataframe(raw_data):
 
 
 
-def save_to_csv(df, csv_name, folder):
+def save_to_csv(df, file_path):
     """
     Saves the given DataFrame as a CSV in the specified folder.
 
@@ -140,13 +145,11 @@ def save_to_csv(df, csv_name, folder):
     Raises:
         IOError: If folder does not exist or write fails
     """
+    if not os.path.isdir("data"):
+        raise IOError("Data folder does not exist. Please create 'data' directory before saving CSV.")
 
-    root_dir = os.getcwd()
-    logging.info("roor dir = {root_dir}")
-    data_path = os.path.join(root_dir, folder)
-    
-
-    file_path = os.path.join(data_path, csv_name)
+    if not isinstance(df, pd.DataFrame):
+        raise ValueError("Input data must be a Pandas DataFrame.")
     if os.path.exists(file_path):
         logging.warning(f"CSV '{file_path}' already exists. It will be replaced.")
 

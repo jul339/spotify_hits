@@ -55,7 +55,7 @@ def test_etl_pipeline_integration(tmp_path, mock_spotify_client):
 
     # 4. Save to csv
     output_file = tmp_path / "test_output.csv"
-    save_to_csv(df, csv_name=str(output_file), folder='data')
+    save_to_csv(df, output_file)
     assert output_file.exists()
 
     # 5. Vérification du contenu
