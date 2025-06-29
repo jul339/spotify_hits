@@ -1,4 +1,4 @@
-/.cache
+*.cache
 /.pytest_cache
 
 # Environnement Python
